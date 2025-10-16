@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAAA - Diagnostic</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>EAAA - Diagnostic de déploiement</h1>
+    <div id="diagnostic">
+        <p class="info">Chargement du diagnostic...</p>
+    </div>
+    
+    <script>
+        const diagnostic = document.getElementById('diagnostic');
+        
+        function addResult(message, type = 'info') {
+            const p = document.createElement('p');
+            p.className = type;
+            p.textContent = message;
+            diagnostic.appendChild(p);
+        }
+        
+        // Test 1: Vérifier que JavaScript fonctionne
+        addResult('✅ JavaScript fonctionne', 'success');
+        
+        // Test 2: Vérifier les chemins
+        addResult(`📍 URL actuelle: ${window.location.href}`, 'info');
+        addResult(`📍 Pathname: ${window.location.pathname}`, 'info');
+        
+        // Test 3: Vérifier les assets
+        const testAssets = [
+            '/assets/index.css',
+            '/assets/index.js'
+        ];
+        
+        testAssets.forEach(asset => {
+            fetch(asset)
+                .then(response => {
+                    if (response.ok) {
+                        addResult(`✅ Asset trouvé: ${asset}`, 'success');
+                    } else {
+                        addResult(`❌ Asset manquant: ${asset} (${response.status})`, 'error');
+                    }
+                })
+                .catch(error => {
+                    addResult(`❌ Erreur asset ${asset}: ${error.message}`, 'error');
+                });
+        });
+        
+        // Test 4: Vérifier React
+        setTimeout(() => {
+            if (typeof React !== 'undefined') {
+                addResult('✅ React chargé', 'success');
+            } else {
+                addResult('❌ React non chargé', 'error');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
