@@ -1,0 +1,38 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Logo area -->
+  <rect x="50" y="50" width="200" height="200" fill="white" rx="20"/>
+  
+  <!-- EAAA Text in logo area -->
+  <text x="150" y="120" font-family="Arial, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="#1e40af">EAAA</text>
+  <text x="150" y="180" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#6b7280">Excellence Logistique</text>
+  
+  <!-- Main title -->
+  <text x="300" y="150" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="white">EAAA</text>
+  <text x="300" y="200" font-family="Arial, sans-serif" font-size="32" fill="white">L'excellence logistique</text>
+  <text x="300" y="240" font-family="Arial, sans-serif" font-size="32" fill="#fbbf24">parfaitement orchestrée</text>
+  <text x="300" y="280" font-family="Arial, sans-serif" font-size="32" fill="white">au cœur de vos opérations</text>
+  
+  <!-- Subtitle -->
+  <text x="300" y="350" font-family="Arial, sans-serif" font-size="24" fill="rgba(255,255,255,0.9)">Assistance aéroportuaire • Transport premium • Démarches administratives</text>
+  <text x="300" y="380" font-family="Arial, sans-serif" font-size="24" fill="rgba(255,255,255,0.9)">Hébergement • Service 24h/24 et 7j/7</text>
+  
+  <!-- Contact info -->
+  <text x="300" y="450" font-family="Arial, sans-serif" font-size="20" fill="rgba(255,255,255,0.8)">Libreville • Port-Gentil • Gabon</text>
+  <text x="300" y="480" font-family="Arial, sans-serif" font-size="20" fill="rgba(255,255,255,0.8)">www.eaaa.pro • +241 07 37 29 96</text>
+  
+  <!-- Decorative elements -->
+  <circle cx="1000" cy="150" r="80" fill="rgba(255,255,255,0.1)"/>
+  <circle cx="1100" cy="300" r="60" fill="rgba(255,255,255,0.1)"/>
+  <circle cx="1050" cy="450" r="40" fill="rgba(255,255,255,0.1)"/>
+</svg>
