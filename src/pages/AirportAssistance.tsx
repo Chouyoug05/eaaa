@@ -16,7 +16,7 @@ import {
   Globe,
   Calendar
 } from "lucide-react";
-import heroImage from "@/assets/hero-airport.jpg";
+import heroImage from "@/assets/transport-fleet.jpg";
 
 const AirportAssistance = () => {
   const services = [
