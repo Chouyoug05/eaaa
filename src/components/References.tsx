@@ -1,17 +1,31 @@
-const references = [
-  { name: "ADDAX PETROLEUM", domain: "addaxpetroleum.com", local: "/logos/addax-petroleum.png" },
-  { name: "ENI", domain: "eni.com", local: "/logos/eni.png" },
-  { name: "ASSALA ENERGY", domain: "assalaenergy.com", local: "/logos/assala-energy.png" },
-  { name: "SCHLUMBERGER", domain: "slb.com", local: "/logos/schlumberger.png" },
-  { name: "BOLLORÉ LOGISTICS", domain: "bollore-logistics.com", local: "/logos/bollore-logistics.png" },
-  { name: "PERENCO", domain: "perenco.com", local: "/logos/perenco.png" },
-  { name: "TOTAL ENERGIES", domain: "totalenergies.com", local: "/logos/total-energies.png" },
-  { name: "MAUREL & PROM", domain: "maureletprom.com", local: "/logos/maurel-prom.png" },
+import { useState } from "react";
+
+interface Reference {
+  name: string;
+  domain: string;
+  localLogo?: string;
+}
+
+const references: Reference[] = [
+  { name: "ADDAX PETROLEUM", domain: "addaxpetroleum.com", localLogo: "/logos/addax-petroleum.png" },
+  { name: "ENI", domain: "eni.com", localLogo: "/logos/eni.png" },
+  { name: "ASSALA ENERGY", domain: "assalaenergy.com", localLogo: "/logos/assala-energy.png" },
+  { name: "SCHLUMBERGER", domain: "slb.com", localLogo: "/logos/schlumberger.png" },
+  { name: "BOLLORÉ LOGISTICS", domain: "bollore-logistics.com", localLogo: "/logos/bollore-logistics.png" },
+  { name: "PERENCO", domain: "perenco.com", localLogo: "/logos/perenco.png" },
+  { name: "TOTAL ENERGIES", domain: "totalenergies.com", localLogo: "/logos/total-energies.png" },
+  { name: "MAUREL & PROM", domain: "maureletprom.com", localLogo: "/logos/maurel-prom.png" },
 ];
 
-const getLogoUrl = (domain: string) => `https://logo.clearbit.com/${domain}?size=256`;
-
 const References = () => {
+  const [imageErrors, setImageErrors] = useState<{[key: string]: boolean}>({});
+
+  const handleImageError = (name: string) => {
+    setImageErrors(prev => ({ ...prev, [name]: true }));
+  };
+
+  const getLogoUrl = (domain: string) => `https://logo.clearbit.com/${domain}?size=256`;
+
   return (
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -28,26 +42,23 @@ const References = () => {
           {references.map((ref, index) => (
             <div
               key={index}
-              className="flex items-center justify-center p-6 bg-card rounded-lg shadow-card hover-lift"
+              className="flex items-center justify-center p-6 bg-card rounded-lg shadow-card hover-lift group"
               style={{ animationDelay: `${index * 50}ms` }}
             >
-              <picture>
-                {/* Essaye d'abord le logo local */}
-                <source srcSet={ref.local} />
-                {/* Fallback distant via Clearbit si le local manque */}
+              {!imageErrors[ref.name] ? (
                 <img
-                  src={getLogoUrl(ref.domain)}
-                  alt={ref.name}
-                  loading="lazy"
-                  className="max-h-12 md:max-h-14 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-200 opacity-90 hover:opacity-100"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = "none";
-                  }}
+                  src={ref.localLogo || getLogoUrl(ref.domain)}
+                  alt={`${ref.name} logo`}
+                  className="h-12 w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
+                  onError={() => handleImageError(ref.name)}
                 />
-              </picture>
-              {/* Fallback texte si logo indisponible */}
-              <span className="sr-only">{ref.name}</span>
+              ) : (
+                <div className="text-center">
+                  <p className="font-semibold text-sm md:text-base text-foreground">
+                    {ref.name}
+                  </p>
+                </div>
+              )}
             </div>
           ))}
         </div>

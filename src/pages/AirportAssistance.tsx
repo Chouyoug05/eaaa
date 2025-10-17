@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import AssistanceForm from "@/components/AssistanceForm";
+import InteractiveMap from "@/components/InteractiveMap";
 import { 
   Plane, 
   CheckCircle2, 
@@ -207,15 +208,9 @@ const AirportAssistance = () => {
               </div>
             </div>
 
-            {/* Map Placeholder */}
+            {/* Interactive Map */}
             <div className="relative">
-              <div className="bg-muted/30 rounded-xl p-8 h-96 flex items-center justify-center">
-                <div className="text-center">
-                  <Globe className="h-24 w-24 text-primary mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-foreground mb-2">Carte Interactive</h3>
-                  <p className="text-muted-foreground">Visualisation des aéroports couverts</p>
-                </div>
-              </div>
+              <InteractiveMap />
             </div>
           </div>
         </div>
