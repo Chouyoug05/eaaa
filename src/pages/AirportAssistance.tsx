@@ -2,7 +2,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import AssistanceForm from "@/components/AssistanceForm";
-import InteractiveMap from "@/components/InteractiveMap";
+import GoogleMapGabon from "@/components/GoogleMapGabon";
 import { 
   Plane, 
   CheckCircle2, 
@@ -208,9 +208,9 @@ const AirportAssistance = () => {
               </div>
             </div>
 
-            {/* Interactive Map */}
+            {/* Google Maps Gabon */}
             <div className="relative">
-              <InteractiveMap />
+              <GoogleMapGabon />
             </div>
           </div>
         </div>
