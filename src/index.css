@@ -213,4 +213,9 @@ All colors MUST be HSL.
       transform: translateX(0);
     }
   }
+  
+  .bg-dot-pattern {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
 }
