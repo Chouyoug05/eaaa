@@ -2,7 +2,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import AssistanceForm from "@/components/AssistanceForm";
-import GoogleMapGabon from "@/components/GoogleMapGabon";
+import RealisticMapGabon from "@/components/RealisticMapGabon";
 import { 
   Plane, 
   CheckCircle2, 
@@ -208,9 +208,9 @@ const AirportAssistance = () => {
               </div>
             </div>
 
-            {/* Google Maps Gabon */}
+            {/* Carte Réaliste du Gabon */}
             <div className="relative">
-              <GoogleMapGabon />
+              <RealisticMapGabon />
             </div>
           </div>
         </div>
