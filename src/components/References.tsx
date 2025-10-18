@@ -7,14 +7,14 @@ interface Reference {
 }
 
 const references: Reference[] = [
-  { name: "ADDAX PETROLEUM", domain: "addaxpetroleum.com", localLogo: "/logos/addax-petroleum.png" },
-  { name: "ENI", domain: "eni.com", localLogo: "/logos/eni.png" },
-  { name: "ASSALA ENERGY", domain: "assalaenergy.com", localLogo: "/logos/assala-energy.png" },
-  { name: "SCHLUMBERGER", domain: "slb.com", localLogo: "/logos/schlumberger.png" },
-  { name: "BOLLORÉ LOGISTICS", domain: "bollore-logistics.com", localLogo: "/logos/bollore-logistics.png" },
-  { name: "PERENCO", domain: "perenco.com", localLogo: "/logos/perenco.png" },
-  { name: "TOTAL ENERGIES", domain: "totalenergies.com", localLogo: "/logos/total-energies.png" },
-  { name: "MAUREL & PROM", domain: "maureletprom.com", localLogo: "/logos/maurel-prom.png" },
+  { name: "ADDAX PETROLEUM", domain: "addaxpetroleum.com" },
+  { name: "ENI", domain: "eni.com" },
+  { name: "ASSALA ENERGY", domain: "assalaenergy.com" },
+  { name: "SCHLUMBERGER", domain: "slb.com" },
+  { name: "BOLLORÉ LOGISTICS", domain: "bollore-logistics.com" },
+  { name: "PERENCO", domain: "perenco.com" },
+  { name: "TOTAL ENERGIES", domain: "totalenergies.com" },
+  { name: "MAUREL & PROM", domain: "maureletprom.com" },
 ];
 
 const References = () => {
@@ -24,7 +24,7 @@ const References = () => {
     setImageErrors(prev => ({ ...prev, [name]: true }));
   };
 
-  const getLogoUrl = (domain: string) => `https://logo.clearbit.com/${domain}?size=256`;
+  const getLogoUrl = (domain: string) => `https://logo.clearbit.com/${domain}?size=128`;
 
   return (
     <section className="py-20 bg-muted/30">
@@ -42,19 +42,25 @@ const References = () => {
           {references.map((ref, index) => (
             <div
               key={index}
-              className="flex items-center justify-center p-6 bg-card rounded-lg shadow-card hover-lift group"
+              className="flex items-center justify-center p-6 bg-card rounded-lg shadow-card hover-lift group min-h-[120px]"
               style={{ animationDelay: `${index * 50}ms` }}
             >
               {!imageErrors[ref.name] ? (
                 <img
-                  src={ref.localLogo || getLogoUrl(ref.domain)}
+                  src={getLogoUrl(ref.domain)}
                   alt={`${ref.name} logo`}
-                  className="h-12 w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
+                  className="max-h-12 w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
                   onError={() => handleImageError(ref.name)}
+                  onLoad={() => console.log(`Logo loaded: ${ref.name}`)}
                 />
               ) : (
                 <div className="text-center">
-                  <p className="font-semibold text-sm md:text-base text-foreground">
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-2 mx-auto">
+                    <span className="text-primary font-bold text-lg">
+                      {ref.name.charAt(0)}
+                    </span>
+                  </div>
+                  <p className="font-semibold text-xs text-foreground leading-tight">
                     {ref.name}
                   </p>
                 </div>
