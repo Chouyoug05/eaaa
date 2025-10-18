@@ -19,7 +19,7 @@ import {
   FileCheck,
   UserCheck,
   Briefcase,
-  Certificate,
+  FileBadge,
   Languages,
   Database,
   CheckCircle
@@ -48,7 +48,7 @@ const AdministrativeServices = () => {
       iconColor: "text-slate-700"
     },
     {
-      icon: Certificate,
+      icon: FileBadge,
       title: "Cartes de séjour",
       description: "Renouvellement et obtention de cartes de séjour",
       features: ["Carte temporaire", "Carte permanente", "Renouvellement"],
