@@ -21,7 +21,7 @@ const InteractiveMap = () => {
       name: "Aéroport International Léon M'ba",
       city: "Libreville",
       code: "LBV",
-      position: { x: 20, y: 60 },
+      position: { x: 15, y: 25 },
       services: ["Assistance VIP", "Formalités", "Transfert", "Bagages"],
       phone: "+241 07 37 29 96",
       hours: "24h/24 - 7j/7"
@@ -31,7 +31,7 @@ const InteractiveMap = () => {
       name: "Aéroport de Port-Gentil",
       city: "Port-Gentil",
       code: "POG",
-      position: { x: 80, y: 70 },
+      position: { x: 25, y: 75 },
       services: ["Accueil standard", "Formalités", "Transfert"],
       phone: "+241 03 46 78 81",
       hours: "24h/24 - 7j/7"
@@ -39,9 +39,72 @@ const InteractiveMap = () => {
   ];
 
   return (
-    <div className="relative w-full h-96 bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 rounded-3xl overflow-hidden border-2 border-slate-200 shadow-2xl">
+    <div className="relative w-full h-96 bg-gradient-to-br from-blue-50 via-green-50 to-blue-100 rounded-3xl overflow-hidden border-2 border-slate-200 shadow-2xl">
       {/* Map Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-100 via-blue-50 to-slate-100">
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-green-50 to-blue-100">
+        {/* Gabon Map Silhouette */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <svg 
+            width="280" 
+            height="320" 
+            viewBox="0 0 280 320" 
+            className="opacity-20"
+          >
+            {/* Simplified Gabon outline */}
+            <path
+              d="M 50 50 
+                 L 80 45 
+                 L 120 40 
+                 L 160 45 
+                 L 200 50 
+                 L 220 60 
+                 L 230 80 
+                 L 235 100 
+                 L 240 120 
+                 L 245 140 
+                 L 250 160 
+                 L 255 180 
+                 L 260 200 
+                 L 265 220 
+                 L 270 240 
+                 L 275 260 
+                 L 280 280 
+                 L 275 300 
+                 L 270 310 
+                 L 260 315 
+                 L 240 320 
+                 L 220 315 
+                 L 200 310 
+                 L 180 305 
+                 L 160 300 
+                 L 140 295 
+                 L 120 290 
+                 L 100 285 
+                 L 80 280 
+                 L 60 275 
+                 L 40 270 
+                 L 20 265 
+                 L 10 260 
+                 L 5 240 
+                 L 10 220 
+                 L 15 200 
+                 L 20 180 
+                 L 25 160 
+                 L 30 140 
+                 L 35 120 
+                 L 40 100 
+                 L 45 80 
+                 L 50 60 
+                 Z"
+              fill="currentColor"
+              className="text-green-600"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="text-green-700"
+            />
+          </svg>
+        </div>
+
         {/* Decorative elements */}
         <div className="absolute top-6 left-6 w-3 h-3 bg-blue-500 rounded-full animate-pulse shadow-lg"></div>
         <div className="absolute top-12 right-12 w-2 h-2 bg-green-500 rounded-full animate-ping shadow-md"></div>
@@ -49,21 +112,9 @@ const InteractiveMap = () => {
         <div className="absolute bottom-16 right-1/3 w-1.5 h-1.5 bg-orange-400 rounded-full animate-ping shadow-md"></div>
         <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-pink-400 rounded-full animate-pulse"></div>
         
-        {/* Enhanced grid pattern */}
-        <div className="absolute inset-0 opacity-15">
-          <svg width="100%" height="100%">
-            <defs>
-              <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-                <path d="M 50 0 L 0 0 0 50" fill="none" stroke="currentColor" strokeWidth="0.5"/>
-                <circle cx="25" cy="25" r="1" fill="currentColor" opacity="0.3"/>
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" className="text-slate-300"/>
-          </svg>
-        </div>
-
-        {/* Subtle waves */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-blue-100/30 to-transparent"></div>
+        {/* Ocean waves */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-blue-200/40 to-transparent"></div>
+        <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-blue-200/40 to-transparent"></div>
       </div>
 
       {/* Airport Markers */}
@@ -96,31 +147,33 @@ const InteractiveMap = () => {
         </div>
       ))}
 
-      {/* Enhanced Connection Line */}
+      {/* Enhanced Connection Line following Gabon shape */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none">
         <defs>
           <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3"/>
-            <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.6"/>
-            <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.3"/>
+            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4"/>
+            <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.7"/>
+            <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.4"/>
           </linearGradient>
         </defs>
-        <line
-          x1="20%"
-          y1="60%"
-          x2="80%"
-          y2="70%"
+        {/* Curved line following Gabon's coastline */}
+        <path
+          d="M 15% 25% Q 20% 50% 25% 75%"
           stroke="url(#connectionGradient)"
-          strokeWidth="3"
-          strokeDasharray="8,4"
+          strokeWidth="4"
+          strokeDasharray="10,5"
+          fill="none"
           className="animate-pulse"
         />
-        {/* Animated dots along the line */}
-        <circle cx="35%" cy="63%" r="2" fill="#3b82f6" opacity="0.6" className="animate-ping">
-          <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite"/>
+        {/* Animated dots along the curved path */}
+        <circle cx="17%" cy="40%" r="2" fill="#3b82f6" opacity="0.7" className="animate-ping">
+          <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2s" repeatCount="indefinite"/>
         </circle>
-        <circle cx="65%" cy="66.5%" r="2" fill="#8b5cf6" opacity="0.6" className="animate-ping">
-          <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" begin="1s"/>
+        <circle cx="20%" cy="50%" r="2" fill="#8b5cf6" opacity="0.7" className="animate-ping">
+          <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+        </circle>
+        <circle cx="22%" cy="62%" r="2" fill="#06b6d4" opacity="0.7" className="animate-ping">
+          <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2s" repeatCount="indefinite" begin="1s"/>
         </circle>
       </svg>
 
@@ -174,6 +227,12 @@ const InteractiveMap = () => {
           </div>
         </div>
       )}
+
+      {/* Gabon Title */}
+      <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-lg rounded-xl px-4 py-2 shadow-xl border border-slate-200">
+        <h3 className="text-lg font-bold text-slate-800">GABON</h3>
+        <p className="text-xs text-slate-600">République Gabonaise</p>
+      </div>
 
       {/* Enhanced Map Legend */}
       <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-lg rounded-xl p-4 shadow-xl border border-slate-200">
