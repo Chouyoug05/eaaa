@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import QuoteModal from "@/components/QuoteModal";
+import TransportBookingForm from "@/components/TransportBookingForm";
 import { 
   Car, 
   CheckCircle2, 
@@ -137,12 +137,12 @@ const Transport = () => {
               Déplacements en toute sécurité avec notre flotte premium
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
-              <QuoteModal serviceName="de transport">
+              <TransportBookingForm>
                 <Button size="lg" className="bg-white text-primary hover:bg-white/90 group">
                   Réserver maintenant
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
-              </QuoteModal>
+              </TransportBookingForm>
               <a href="tel:+24107372996">
                 <Button size="lg" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm">
                   <Phone className="mr-2 h-5 w-5" />
@@ -358,12 +358,12 @@ const Transport = () => {
                               </div>
                             ))}
                           </div>
-                          <QuoteModal serviceName={`${vehicle.title.toLowerCase()}`}>
+                          <TransportBookingForm vehicleType={vehicle.title}>
                             <Button size="lg" className="bg-gradient-hero text-white hover:opacity-90">
                               Réserver ce véhicule
                               <ArrowRight className="ml-2 h-5 w-5" />
                             </Button>
-                          </QuoteModal>
+                          </TransportBookingForm>
                         </div>
                         <div className="relative">
                           <img 
@@ -406,7 +406,7 @@ const Transport = () => {
                     }`}
                   />
                 ))}
-              </div>
+            </div>
             </div>
           </div>
         </div>
@@ -518,13 +518,13 @@ const Transport = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
-              <QuoteModal serviceName="de transport">
+              <TransportBookingForm>
                 <Button size="lg" className="bg-white text-primary hover:bg-white/90 text-xl px-12 py-6 rounded-full font-bold shadow-2xl transition-all duration-300 hover:scale-105">
                   <Car className="mr-3 h-6 w-6" />
                   Réserver maintenant
                   <ArrowRight className="ml-3 h-6 w-6" />
                 </Button>
-              </QuoteModal>
+              </TransportBookingForm>
               <a href="tel:+24107372996">
                 <Button size="lg" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20 text-xl px-8 py-6 rounded-full font-semibold backdrop-blur-sm">
                   <Phone className="mr-3 h-6 w-6" />
