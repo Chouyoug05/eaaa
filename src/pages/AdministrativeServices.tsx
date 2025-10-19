@@ -1,62 +1,19 @@
-import React, { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import QuoteModal from "@/components/QuoteModal";
-import { 
-  FileText, 
-  CheckCircle2, 
-  Monitor, 
-  Clock, 
-  Shield, 
-  Users, 
-  Award, 
-  ArrowRight, 
-  Phone, 
-  Mail, 
-  MapPin,
-  Building2,
-  FileCheck,
-  UserCheck,
-  Briefcase,
-  FileBadge,
-  Languages,
-  Database,
-  CheckCircle
-} from "lucide-react";
+import { FileText, CheckCircle2, Monitor, ArrowRight, Phone } from "lucide-react";
+import adminImage from "@/assets/admin-services.jpg";
 
 const AdministrativeServices = () => {
   const services = [
-    {
-      icon: Briefcase,
-      title: "Autorisations d'emploi",
-      description: "Obtenez rapidement vos autorisations de travail pour le Gabon"
-    },
-    {
-      icon: UserCheck,
-      title: "Visas et permis de séjour",
-      description: "Gestion complète de vos documents de séjour"
-    },
-    {
-      icon: FileBadge,
-      title: "Cartes de séjour",
-      description: "Renouvellement et obtention de cartes de séjour"
-    },
-    {
-      icon: Building2,
-      title: "Inscription CNSS",
-      description: "Inscription et gestion de vos cotisations sociales"
-    },
-    {
-      icon: FileCheck,
-      title: "Certificats et attestations",
-      description: "Tous types de documents officiels et attestations"
-    },
-    {
-      icon: Languages,
-      title: "Traductions certifiées",
-      description: "Traduction officielle de vos documents"
-    }
+    "Autorisations d'emploi",
+    "Visas et permis de séjour",
+    "Cartes de séjour",
+    "Inscription CNSS",
+    "Certificats et attestations",
+    "Traductions certifiées",
+    "Suivi en ligne via logiciel EAAA"
   ];
 
   const timelineSteps = [
@@ -150,24 +107,8 @@ const AdministrativeServices = () => {
                 </p>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {services.slice(0, 4).map((service, index) => (
-                <div
-                  key={index}
-                  className="group bg-card rounded-xl p-6 shadow-card hover-lift border border-border text-center"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <service.icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="text-lg font-bold mb-2 text-foreground">
-                    {service.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {service.description}
-                  </p>
-                </div>
-              ))}
+            <div className="rounded-xl overflow-hidden shadow-elegant hover-lift">
+              <img src={adminImage} alt="Démarches administratives EAAA" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>
