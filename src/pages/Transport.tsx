@@ -3,6 +3,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import TransportBookingForm from "@/components/TransportBookingForm";
+import ImageSlider from "@/components/ImageSlider";
 import { 
   Car, 
   CheckCircle2, 
@@ -18,13 +19,23 @@ import {
   ChevronLeft,
   ChevronRight,
   Route,
-  Zap
+  Zap,
+  Sun,
+  Moon
 } from "lucide-react";
 import transportImage from "@/assets/transport-fleet.jpg";
 
 const Transport = () => {
   const [currentFleetIndex, setCurrentFleetIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Images pour le slider (utilisant la même image pour l'exemple)
+  const sliderImages = [
+    transportImage,
+    transportImage, // En production, vous ajouterez d'autres images
+    transportImage,
+  ];
 
   const fleetVehicles = [
     {
@@ -52,29 +63,29 @@ const Transport = () => {
       icon: Shield,
       title: "Sécurité Garantie",
       description: "Chauffeurs formés aux standards internationaux",
-      color: "text-green-600",
-      bgColor: "bg-green-50"
+      color: "text-primary",
+      bgColor: "bg-primary/10"
     },
     {
       icon: NavigationIcon,
       title: "Suivi GPS",
       description: "Traçabilité en temps réel de vos déplacements",
-      color: "text-blue-600",
-      bgColor: "bg-blue-50"
+      color: "text-primary",
+      bgColor: "bg-primary/10"
     },
     {
       icon: Thermometer,
       title: "Climatisation",
       description: "Confort optimal dans tous nos véhicules",
-      color: "text-purple-600",
-      bgColor: "bg-purple-50"
+      color: "text-primary",
+      bgColor: "bg-primary/10"
     },
     {
       icon: User,
       title: "Chauffeur Formé",
       description: "Personnel professionnel et expérimenté",
-      color: "text-orange-600",
-      bgColor: "bg-orange-50"
+      color: "text-primary",
+      bgColor: "bg-primary/10"
     }
   ];
 
@@ -105,6 +116,13 @@ const Transport = () => {
     }
   ];
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const nextFleetVehicle = () => {
     if (isAnimating) return;
     setIsAnimating(true);
@@ -120,42 +138,87 @@ const Transport = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-muted/50 via-background to-muted/30"></div>
+        {/* Floating light orbs */}
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-primary/20 to-primary/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-accent/20 to-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-48 h-48 bg-gradient-to-r from-primary/15 to-accent/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
+      </div>
+
       <Navigation />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 bg-gradient-hero text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center space-y-6 fade-in">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/10 mb-4">
-              <Car className="h-10 w-10 text-white" />
+      {/* Full Screen Hero Slider */}
+      <section className="relative h-screen">
+        <ImageSlider 
+          images={sliderImages}
+          alt="Transport EAAA"
+          className="h-full"
+          autoPlay={true}
+          autoPlayInterval={6000}
+        />
+        
+        {/* Hero Content Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div className="container mx-auto px-4 text-center text-white">
+            <div className="max-w-5xl mx-auto space-y-8 fade-in">
+              <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-white/10 backdrop-blur-sm mb-6">
+                <Car className="h-12 w-12 text-white" />
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold">
-              Transport & Liaisons Terrestres
+              
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                Transport &{" "}
+                <span className="text-accent">Liaisons Terrestres</span>
             </h1>
-            <p className="text-xl text-white/90">
+              
+              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
               Déplacements en toute sécurité avec notre flotte premium
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
-              <TransportBookingForm>
-                <Button size="lg" className="bg-white text-primary hover:bg-white/90 group">
-                  Réserver maintenant
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </TransportBookingForm>
-              <a href="tel:+24107372996">
-                <Button size="lg" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm">
-                  <Phone className="mr-2 h-5 w-5" />
-                  Nous contacter
-                </Button>
-              </a>
+              
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
+                <TransportBookingForm>
+                  <Button
+                    size="lg"
+                    className="bg-accent text-primary-foreground hover:bg-accent/90 text-lg px-8 py-4 rounded-full font-bold shadow-xl transition-all duration-300 hover:scale-105 group"
+                  >
+                    <Car className="mr-2 h-5 w-5" />
+                    Réserver maintenant
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </TransportBookingForm>
+
+                <a href="tel:+24107372996">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-white/30 bg-white/10 text-white hover:bg-white/20 text-lg px-6 py-4 rounded-full font-semibold backdrop-blur-sm"
+                  >
+                    <Phone className="mr-2 h-5 w-5" />
+                    Nous contacter
+                  </Button>
+                </a>
+              </div>
+
+              {/* Live Time Display */}
+              <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <Sun className="h-4 w-4 text-yellow-300" />
+                <span className="text-sm font-medium">
+                  {currentTime.toLocaleTimeString('fr-FR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    timeZone: 'Africa/Libreville'
+                  })} - Libreville
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Interactive Map Section */}
-      <section className="py-24 bg-background">
+      <section className="py-24 bg-background -mt-1">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-4xl md:text-5xl font-bold">
@@ -428,18 +491,31 @@ const Transport = () => {
             {advantages.map((advantage, index) => (
               <div
                 key={index}
-                className="group text-center p-8 bg-card rounded-xl shadow-card hover-lift border border-border"
+                className="group relative bg-card rounded-2xl p-8 hover-lift shadow-card border border-border text-center transition-all duration-500 hover:scale-105"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full ${advantage.bgColor} mb-6 group-hover:scale-110 transition-all duration-300`}>
-                  <advantage.icon className={`h-10 w-10 ${advantage.color} animate-pulse`} />
+                {/* Animated Background */}
+                <div className="absolute inset-0 bg-primary/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                {/* Icon with Animation */}
+                <div className="relative z-10 mb-6">
+                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/20 group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-primary/20 group-hover:to-accent/20 transition-all duration-500">
+                    <advantage.icon className="h-10 w-10 text-primary group-hover:text-primary group-hover:rotate-12 transition-all duration-500" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-foreground">
-                  {advantage.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {advantage.description}
-                </p>
+
+                {/* Content */}
+                <div className="relative z-10">
+                  <h3 className="text-xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors duration-300">
+                    {advantage.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed group-hover:text-foreground transition-colors duration-300">
+                    {advantage.description}
+                  </p>
+                </div>
+
+                {/* Hover Effect */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </div>
             ))}
           </div>

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import QuoteModal from "@/components/QuoteModal";
+import ImageSlider from "@/components/ImageSlider";
 import { 
   FileText, 
   CheckCircle2, 
@@ -14,12 +15,29 @@ import {
   FileBadge,
   Building2,
   FileCheck,
-  Languages
+  Languages,
+  Sun,
+  Moon
 } from "lucide-react";
 import adminImage from "@/assets/admin-services.jpg";
 
 const AdministrativeServices = () => {
   const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Images pour le slider (utilisant la même image pour l'exemple)
+  const sliderImages = [
+    adminImage,
+    adminImage, // En production, vous ajouterez d'autres images
+    adminImage,
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const services = [
     {
@@ -80,42 +98,87 @@ const AdministrativeServices = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-muted/50 via-background to-muted/30"></div>
+        {/* Floating light orbs */}
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-primary/20 to-primary/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-accent/20 to-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-48 h-48 bg-gradient-to-r from-primary/15 to-accent/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
+      </div>
+
       <Navigation />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 bg-gradient-hero text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center space-y-6 fade-in">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/10 mb-4">
-              <FileText className="h-10 w-10 text-white" />
+      {/* Full Screen Hero Slider */}
+      <section className="relative h-screen">
+        <ImageSlider 
+          images={sliderImages}
+          alt="Démarches Administratives EAAA"
+          className="h-full"
+          autoPlay={true}
+          autoPlayInterval={6000}
+        />
+        
+        {/* Hero Content Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div className="container mx-auto px-4 text-center text-white">
+            <div className="max-w-5xl mx-auto space-y-8 fade-in">
+              <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-white/10 backdrop-blur-sm mb-6">
+                <FileText className="h-12 w-12 text-white" />
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold">
-              Démarches Administratives
+              
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                Démarches{" "}
+                <span className="text-accent">Administratives</span>
             </h1>
-            <p className="text-xl text-white/90">
+              
+              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
               Gestion complète de vos formalités avec efficacité et transparence
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
-              <QuoteModal serviceName="de démarches administratives">
-                <Button size="lg" className="bg-white text-primary hover:bg-white/90 group">
-                  Demander un devis
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </QuoteModal>
-              <a href="tel:+24107372996">
-                <Button size="lg" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm">
-                  <Phone className="mr-2 h-5 w-5" />
-                  Nous contacter
-                </Button>
-              </a>
+              
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
+                <QuoteModal serviceName="de démarches administratives">
+                  <Button
+                    size="lg"
+                    className="bg-accent text-primary-foreground hover:bg-accent/90 text-lg px-8 py-4 rounded-full font-bold shadow-xl transition-all duration-300 hover:scale-105 group"
+                  >
+                    <FileText className="mr-2 h-5 w-5" />
+                    Demander un devis
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </QuoteModal>
+
+                <a href="tel:+24107372996">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-white/30 bg-white/10 text-white hover:bg-white/20 text-lg px-6 py-4 rounded-full font-semibold backdrop-blur-sm"
+                  >
+                    <Phone className="mr-2 h-5 w-5" />
+                    Nous contacter
+                  </Button>
+                </a>
+              </div>
+
+              {/* Live Time Display */}
+              <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <Sun className="h-4 w-4 text-yellow-300" />
+                <span className="text-sm font-medium">
+                  {currentTime.toLocaleTimeString('fr-FR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    timeZone: 'Africa/Libreville'
+                  })} - Libreville
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Content Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-background -mt-1">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 fade-in">

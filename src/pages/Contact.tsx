@@ -1,15 +1,20 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import ImageSlider from "@/components/ImageSlider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { MapPin, Phone, Mail, Globe, Send } from "lucide-react";
+import { MapPin, Phone, Mail, Globe, Send, Sun, Moon, ArrowRight, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import heroImage from "@/assets/hero-airport.jpg";
+import transportImage from "@/assets/transport-fleet.jpg";
+import guestHouseImage from "@/assets/guest-house.jpg";
 
 const Contact = () => {
   const { toast } = useToast();
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -17,6 +22,20 @@ const Contact = () => {
     email: "",
     message: "",
   });
+
+  // Images pour le slider
+  const sliderImages = [
+    heroImage,
+    transportImage,
+    guestHouseImage,
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,25 +74,86 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-muted/50 via-background to-muted/30"></div>
+        {/* Floating light orbs */}
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-primary/20 to-primary/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-accent/20 to-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-48 h-48 bg-gradient-to-r from-primary/15 to-accent/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
+      </div>
+
       <Navigation />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 bg-gradient-hero text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center space-y-6 fade-in">
-            <h1 className="text-5xl md:text-6xl font-bold">
-              Contactez-nous
-            </h1>
-            <p className="text-xl text-white/90">
-              Notre équipe est disponible 24h/24 et 7j/7 pour répondre à vos besoins
-            </p>
+      {/* Full Screen Hero Slider */}
+      <section className="relative h-screen">
+        <ImageSlider 
+          images={sliderImages}
+          alt="Contact EAAA"
+          className="h-full"
+          autoPlay={true}
+          autoPlayInterval={7000}
+        />
+        
+        {/* Hero Content Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div className="container mx-auto px-4 text-center text-white">
+            <div className="max-w-5xl mx-auto space-y-8 fade-in">
+              <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-white/10 backdrop-blur-sm mb-6">
+                <MessageCircle className="h-12 w-12 text-white" />
+              </div>
+              
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                Contactez{" "}
+                <span className="text-accent">EAAA</span>
+              </h1>
+              
+              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
+                Notre équipe est disponible 24h/24 et 7j/7 pour répondre à vos besoins
+              </p>
+              
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
+                <a href="#contact-form">
+                  <Button
+                    size="lg"
+                    className="bg-accent text-primary-foreground hover:bg-accent/90 text-lg px-8 py-4 rounded-full font-bold shadow-xl transition-all duration-300 hover:scale-105 group"
+                  >
+                    <MessageCircle className="mr-2 h-5 w-5" />
+                    Envoyer un message
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </a>
+                <a href="tel:+24107372996">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-white/30 bg-white/10 text-white hover:bg-white/20 text-lg px-6 py-4 rounded-full font-semibold backdrop-blur-sm"
+                  >
+                    <Phone className="mr-2 h-5 w-5" />
+                    Nous appeler
+                  </Button>
+                </a>
+              </div>
+
+              {/* Live Time Display */}
+              <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <Sun className="h-4 w-4 text-yellow-300" />
+                <span className="text-sm font-medium">
+                  {currentTime.toLocaleTimeString('fr-FR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    timeZone: 'Africa/Libreville'
+                  })} - Libreville
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Contact Form & Info */}
-      <section className="py-20 bg-background">
+      <section id="contact-form" className="py-20 bg-background -mt-1">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
             {/* Form */}
