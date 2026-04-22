@@ -12,6 +12,7 @@ import Transport from "./pages/Transport";
 import Accommodation from "./pages/Accommodation";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import AdminDashboard from "./pages/AdminDashboard";
 import WhatsAppChatbot from "@/components/WhatsAppChatbot";
 
 const queryClient = new QueryClient();
@@ -41,11 +42,13 @@ const App = () => (
           <Route path="/transport" element={<Transport />} />
           <Route path="/hebergement" element={<Accommodation />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
         <WhatsAppChatbot />
       </BrowserRouter>
+
     </TooltipProvider>
   </QueryClientProvider>
 );
