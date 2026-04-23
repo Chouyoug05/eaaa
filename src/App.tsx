@@ -13,6 +13,13 @@ import Accommodation from "./pages/Accommodation";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminLogin from "./pages/AdminLogin";
+import AdminLayout from "./components/admin/AdminLayout";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminServices from "./pages/admin/AdminServices";
+import AdminTransports from "./pages/admin/AdminTransports";
+import AdminAccommodations from "./pages/admin/AdminAccommodations";
+import AdminSettings from "./pages/admin/AdminSettings";
 import WhatsAppChatbot from "@/components/WhatsAppChatbot";
 
 const queryClient = new QueryClient();
@@ -42,7 +49,17 @@ const App = () => (
           <Route path="/transport" element={<Transport />} />
           <Route path="/hebergement" element={<Accommodation />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/admin" element={<AdminDashboard />} />
+          
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="services" element={<AdminServices />} />
+            <Route path="transports" element={<AdminTransports />} />
+            <Route path="accommodations" element={<AdminAccommodations />} />
+            <Route path="settings" element={<AdminSettings />} />
+          </Route>
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

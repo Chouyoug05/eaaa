@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { 
   LayoutDashboard, 
   Users, 
@@ -12,6 +12,12 @@ import {
 
 const AdminSidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAdminAuthenticated");
+    navigate("/admin/login");
+  };
 
   const menuItems = [
     { title: "Tableau de bord", icon: LayoutDashboard, path: "/admin" },
@@ -49,7 +55,10 @@ const AdminSidebar = () => {
       </nav>
 
       <div className="p-4 border-t border-sidebar-border">
-        <button className="flex w-full items-center space-x-3 px-4 py-3 text-red-500 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors">
+        <button 
+          onClick={handleLogout}
+          className="flex w-full items-center space-x-3 px-4 py-3 text-red-500 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+        >
           <LogOut className="h-5 w-5" />
           <span className="font-medium">Déconnexion</span>
         </button>
