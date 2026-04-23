@@ -19,7 +19,8 @@ import {
   UserCheck, 
   UserX,
   Mail,
-  Calendar
+  Calendar,
+  Filter
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -29,8 +30,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
-const usersData = [
+const initialUsers = [
   { id: 1, name: "Jean Dupont", email: "jean.dupont@email.com", role: "Utilisateur", status: "Actif", date: "2024-03-15" },
   { id: 2, name: "Marie Martin", email: "marie.m@email.com", role: "Utilisateur", status: "Inactif", date: "2024-03-20" },
   { id: 3, name: "Ali Yilmaz", email: "ali.y@email.com", role: "Modérateur", status: "Actif", date: "2024-01-10" },
@@ -40,12 +52,47 @@ const usersData = [
 ];
 
 const AdminUsers = () => {
+  const [users, setUsers] = useState(initialUsers);
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("Tous");
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newUser, setNewUser] = useState({ name: "", email: "", role: "Utilisateur" });
 
-  const filteredUsers = usersData.filter(user => 
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = users.filter(user => {
+    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === "Tous" || user.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
+  const handleAddUser = (e: React.FormEvent) => {
+    e.preventDefault();
+    const userToAdd = {
+      id: users.length + 1,
+      ...newUser,
+      status: "Actif",
+      date: new Date().toISOString().split('T')[0]
+    };
+    setUsers([userToAdd, ...users]);
+    setNewUser({ name: "", email: "", role: "Utilisateur" });
+    setIsAddModalOpen(false);
+    toast.success("Utilisateur ajouté avec succès");
+  };
+
+  const handleDeleteUser = (id: number) => {
+    setUsers(users.filter(u => u.id !== id));
+    toast.success("Utilisateur supprimé");
+  };
+
+  const toggleUserStatus = (id: number) => {
+    setUsers(users.map(u => {
+      if (u.id === id) {
+        return { ...u, status: u.status === "Actif" ? "Inactif" : "Actif" };
+      }
+      return u;
+    }));
+    toast.info("Statut mis à jour");
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -67,10 +114,62 @@ const AdminUsers = () => {
           <h1 className="text-3xl font-bold text-foreground">Gestion des Utilisateurs</h1>
           <p className="text-muted-foreground mt-1">Gérez les comptes et les accès de vos membres.</p>
         </div>
-        <Button className="flex items-center gap-2">
-          <UserPlus className="h-4 w-4" />
-          Ajouter un utilisateur
-        </Button>
+        
+        <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
+          <DialogTrigger asChild>
+            <Button className="flex items-center gap-2">
+              <UserPlus className="h-4 w-4" />
+              Ajouter un utilisateur
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Ajouter un nouvel utilisateur</DialogTitle>
+              <DialogDescription>
+                Remplissez les informations pour créer un nouveau compte.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleAddUser} className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Nom complet</Label>
+                <Input 
+                  id="name" 
+                  placeholder="Jean Dupont" 
+                  value={newUser.name}
+                  onChange={(e) => setNewUser({...newUser, name: e.target.value})}
+                  required 
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="jean@example.com" 
+                  value={newUser.email}
+                  onChange={(e) => setNewUser({...newUser, email: e.target.value})}
+                  required 
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="role">Rôle</Label>
+                <select 
+                  id="role"
+                  className="w-full border rounded-md p-2 bg-background"
+                  value={newUser.role}
+                  onChange={(e) => setNewUser({...newUser, role: e.target.value})}
+                >
+                  <option>Utilisateur</option>
+                  <option>Modérateur</option>
+                  <option>Admin</option>
+                </select>
+              </div>
+              <DialogFooter>
+                <Button type="submit">Créer l'utilisateur</Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="bg-card rounded-xl border shadow-sm">
@@ -85,9 +184,17 @@ const AdminUsers = () => {
             />
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">Tous</Button>
-            <Button variant="ghost" size="sm">Actifs</Button>
-            <Button variant="ghost" size="sm">Inactifs</Button>
+            <Filter className="h-4 w-4 text-muted-foreground mr-2" />
+            {["Tous", "Actif", "Inactif", "Banni"].map((status) => (
+              <Button 
+                key={status}
+                variant={statusFilter === status ? "default" : "ghost"} 
+                size="sm"
+                onClick={() => setStatusFilter(status)}
+              >
+                {status}
+              </Button>
+            ))}
           </div>
         </div>
 
@@ -103,10 +210,10 @@ const AdminUsers = () => {
           </TableHeader>
           <TableBody>
             {filteredUsers.map((user) => (
-              <TableRow key={user.id}>
+              <TableRow key={user.id} className="group transition-colors">
                 <TableCell>
                   <div className="flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-full bg-muted flex items-center justify-center font-medium text-sm">
+                    <div className="h-9 w-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-medium text-sm">
                       {user.name.charAt(0)}
                     </div>
                     <div className="flex flex-col">
@@ -127,17 +234,17 @@ const AdminUsers = () => {
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition-opacity">
                         <MoreVertical className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => toast.info("Édition bientôt disponible")}>
                         <Edit className="mr-2 h-4 w-4" /> Modifier
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => toggleUserStatus(user.id)}>
                         {user.status === "Actif" ? (
                           <><UserX className="mr-2 h-4 w-4 text-orange-600" /> Désactiver</>
                         ) : (
@@ -145,7 +252,7 @@ const AdminUsers = () => {
                         )}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="text-red-600">
+                      <DropdownMenuItem className="text-red-600" onClick={() => handleDeleteUser(user.id)}>
                         <Trash2 className="mr-2 h-4 w-4" /> Supprimer
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -157,14 +264,20 @@ const AdminUsers = () => {
         </Table>
         
         {filteredUsers.length === 0 && (
-          <div className="p-8 text-center text-muted-foreground">
-            Aucun utilisateur trouvé pour "{searchTerm}"
+          <div className="p-12 text-center text-muted-foreground">
+            <div className="flex flex-col items-center gap-2">
+              <Search className="h-8 w-8 opacity-20" />
+              <p>Aucun utilisateur trouvé pour "{searchTerm}"</p>
+              <Button variant="link" onClick={() => {setSearchTerm(""); setStatusFilter("Tous");}}>
+                Réinitialiser les filtres
+              </Button>
+            </div>
           </div>
         )}
 
-        <div className="p-4 border-t flex items-center justify-between">
-          <p className="text-xs text-muted-foreground">
-            Affichage de {filteredUsers.length} sur {usersData.length} utilisateurs
+        <div className="p-4 border-t flex items-center justify-between bg-muted/20">
+          <p className="text-xs text-muted-foreground font-medium">
+            Affichage de {filteredUsers.length} sur {users.length} utilisateurs
           </p>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" disabled>Précédent</Button>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { 
   Table, 
   TableBody, 
@@ -17,10 +17,20 @@ import {
   CheckCircle2, 
   AlertCircle,
   MoreHorizontal,
-  ChevronRight
+  ChevronRight,
+  Eye,
+  Search
 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { toast } from "sonner";
 
-const bookings = [
+const initialBookings = [
   { 
     id: "TR-9021", 
     customer: "Jean Dupont", 
@@ -29,7 +39,8 @@ const bookings = [
     time: "Aujourd'hui, 14:30",
     vehicle: "Mercedes Classe E",
     driver: "Ahmed K.",
-    status: "Confirmé" 
+    status: "Confirmé",
+    details: "Vol AF1234, Arrivée prévue à 14:00."
   },
   { 
     id: "TR-9022", 
@@ -39,7 +50,8 @@ const bookings = [
     time: "Aujourd'hui, 16:00",
     vehicle: "Toyota Prado",
     driver: "Said M.",
-    status: "En attente" 
+    status: "En attente",
+    details: "Besoin de siège bébé."
   },
   { 
     id: "TR-9023", 
@@ -49,7 +61,8 @@ const bookings = [
     time: "Demain, 08:00",
     vehicle: "Mercedes Classe V",
     driver: "Yassine B.",
-    status: "En cours" 
+    status: "En cours",
+    details: "Groupe de 4 personnes."
   },
   { 
     id: "TR-9024", 
@@ -59,11 +72,24 @@ const bookings = [
     time: "Hier, 10:15",
     vehicle: "Range Rover",
     driver: "Karim L.",
-    status: "Terminé" 
+    status: "Terminé",
+    details: "Trajet effectué sans encombre."
   },
 ];
 
 const AdminTransports = () => {
+  const [bookings, setBookings] = useState(initialBookings);
+  const [filter, setFilter] = useState("Tous");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedBooking, setSelectedBooking] = useState<any>(null);
+
+  const filteredBookings = bookings.filter(b => {
+    const matchesFilter = filter === "Tous" || b.status === filter;
+    const matchesSearch = b.customer.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         b.id.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Confirmé":
@@ -87,8 +113,8 @@ const AdminTransports = () => {
           <p className="text-muted-foreground mt-1">Suivez les trajets et gérez la flotte de véhicules.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline">Gestion Flotte</Button>
-          <Button className="gap-2">
+          <Button variant="outline" onClick={() => toast.info("Accès à la flotte bientôt disponible")}>Gestion Flotte</Button>
+          <Button className="gap-2" onClick={() => toast.success("Ouverture du formulaire de réservation")}>
             <Car className="h-4 w-4" />
             Nouvelle Réservation
           </Button>
@@ -126,8 +152,28 @@ const AdminTransports = () => {
       </div>
 
       <div className="bg-card rounded-xl border shadow-sm overflow-hidden">
-        <div className="p-4 border-b">
-          <h3 className="font-semibold">Réservations Récentes</h3>
+        <div className="p-4 border-b flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="relative w-full md:w-80">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input 
+              placeholder="Rechercher par client ou ID..." 
+              className="pl-10"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="flex gap-2">
+            {["Tous", "En attente", "Confirmé", "En cours", "Terminé"].map((s) => (
+              <Button 
+                key={s}
+                variant={filter === s ? "default" : "ghost"} 
+                size="sm"
+                onClick={() => setFilter(s)}
+              >
+                {s}
+              </Button>
+            ))}
+          </div>
         </div>
         <Table>
           <TableHeader>
@@ -140,8 +186,8 @@ const AdminTransports = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {bookings.map((booking) => (
-              <TableRow key={booking.id}>
+            {filteredBookings.map((booking) => (
+              <TableRow key={booking.id} className="group hover:bg-muted/30 transition-colors">
                 <TableCell>
                   <div className="flex flex-col">
                     <span className="font-medium text-foreground">{booking.customer}</span>
@@ -174,8 +220,8 @@ const AdminTransports = () => {
                 </TableCell>
                 <TableCell>{getStatusBadge(booking.status)}</TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost" size="icon">
-                    <MoreHorizontal className="h-4 w-4" />
+                  <Button variant="ghost" size="icon" onClick={() => setSelectedBooking(booking)}>
+                    <Eye className="h-4 w-4" />
                   </Button>
                 </TableCell>
               </TableRow>
@@ -183,8 +229,52 @@ const AdminTransports = () => {
           </TableBody>
         </Table>
       </div>
+
+      {/* Detail Modal */}
+      <Dialog open={!!selectedBooking} onOpenChange={() => setSelectedBooking(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Car className="h-5 w-5 text-primary" />
+              Détails du transport {selectedBooking?.id}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs text-muted-foreground mb-1 uppercase font-bold tracking-wider">Client</p>
+                <p className="font-medium">{selectedBooking?.customer}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground mb-1 uppercase font-bold tracking-wider">Statut</p>
+                {selectedBooking && getStatusBadge(selectedBooking.status)}
+              </div>
+            </div>
+            <Separator />
+            <div className="space-y-2">
+              <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Itinéraire</p>
+              <div className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-red-500" />
+                <span className="text-sm">{selectedBooking?.from}</span>
+              </div>
+              <div className="flex items-center gap-2 pl-6 border-l-2 border-dashed ml-2">
+                <span className="text-sm">{selectedBooking?.to}</span>
+              </div>
+            </div>
+            <Separator />
+            <div>
+              <p className="text-xs text-muted-foreground mb-2 uppercase font-bold tracking-wider">Note supplémentaire</p>
+              <p className="text-sm bg-muted p-3 rounded-lg italic">
+                "{selectedBooking?.details}"
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
+
+const Separator = () => <div className="h-px bg-border w-full" />;
 
 export default AdminTransports;
